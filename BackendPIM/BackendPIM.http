@@ -1,0 +1,6 @@
+@BackendPIM_HostAddress = http://localhost:5272
+
+GET {{BackendPIM_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
