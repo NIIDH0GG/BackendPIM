@@ -1,4 +1,4 @@
-﻿# ConectaLar - Backend & Banco de Dados (PIM)
+﻿# ConectaLar - Banco de Dados (PIM)
 
 Este repositório contém a camada de persistência de dados e a estrutura de banco de dados do projeto **ConectaLar** — uma plataforma integrada para centralização e gerenciamento de serviços de manutenção residencial, desenvolvida como Projeto Integrado Multidisciplinar (PIM).
 
