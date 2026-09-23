@@ -14,7 +14,6 @@ namespace BackendPIM.Models
         [StringLength(1000)]
         public string Descricao { get; set; } = string.Empty;
 
-        // MUDANÇA AQUI: Alterado de 'string' para 'TipoConteudo'
         [Required]
         public TipoConteudo Tipo { get; set; }
 
