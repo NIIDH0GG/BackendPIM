@@ -1,15 +1,24 @@
-﻿namespace BackendPIM.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BackendPIM.Models
 {
     public class ConteudoDiversidade
     {
         public int Id { get; set; }
+
+        [Required]
+        [StringLength(150)]
         public string Titulo { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(1000)]
         public string Descricao { get; set; } = string.Empty;
 
-        // Ex: "Artigo", "Vídeo", "Treinamento Corporativo"
-        public string Tipo { get; set; } = string.Empty;
+        // MUDANÇA AQUI: Alterado de 'string' para 'TipoConteudo'
+        [Required]
+        public TipoConteudo Tipo { get; set; }
 
-        // Conteúdo em texto ou link externo para o treinamento
+        [Required]
         public string Conteudo { get; set; } = string.Empty;
         public DateTime DataPublicacao { get; set; } = DateTime.Now;
     }
