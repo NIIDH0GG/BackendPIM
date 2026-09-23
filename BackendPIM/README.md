@@ -14,19 +14,25 @@ Este repositório contém a camada de persistência de dados e a estrutura de ba
 
 ## Estrutura das Tabelas (Mapeamento do Banco)
 
-O banco de dados foi estruturado e blindado utilizando *Data Annotations* (tamanhos máximos de campos) e restrições de segurança (índices únicos para e-mail). As tabelas contemplam todos os requisitos exigidos pelo escopo:
+O banco de dados foi estruturado e blindado utilizando *Data Annotations* (tamanhos máximos de campos), restrições de integridade e regras de consistência de negócio diretamente no SQLite:
 
-* **Módulo de Autenticação e Perfis:** 
-  * `Usuarios` (Central de logins com suporte a criptografia/Hash e controle por nível: *Cliente, Profissional ou Administrador*).
-* **Módulo Principal (Core):**
-  * `Clientes` (Dados cadastrais vinculados à conta de acesso).
-  * `Profissionais` (Dados cadastrais, especialidades de manutenção e status de disponibilidade).
-  * `Servicos` (Catálogo de serviços e manutenções disponíveis com valores base).
-  * `Agendamentos` (Tabela pivot que correlaciona data/hora com as chaves estrangeiras de Cliente, Profissional e Serviço solicitado).
+* **Módulo de Autenticação e Perfis (Segurança Avançada):** 
+  * `Usuarios` (Central de logins protegida com criptografia/Hash real e controle estrito por nível de acesso via Enums: *Cliente, Profissional ou Administrador*).
+  * **Restrição 1:1:** Configurada via Fluent API para garantir que uma conta de acesso (`Usuario`) pertença a apenas um único Cliente ou Profissional, impedindo duplicidade de perfis.
+  * **E-mail Único:** Índice exclusivo configurado no banco para bloquear cadastros com o mesmo e-mail.
+
+* **Módulo Principal (Core de Negócio):**
+  * `Clientes` (Dados cadastrais vinculados à sua respectiva conta de acesso).
+  * `Profissionais` (Dados cadastrais, especialidades de manutenção e status de disponibilidade em tempo real).
+  * `Servicos` (Catálogo de serviços e manutenções disponíveis com valores base, protegido contra estouro de caracteres).
+  * `Agendamentos` (Tabela central que correlaciona Cliente, Profissional e Serviço. Conta com campo de controle `AceitoPeloProfissional` e proteção via `DeleteBehavior.Restrict` contra exclusões em cascata, preservando o histórico financeiro da empresa).
+  * `Avaliacoes` (Sistema de feedback pós-serviço, limitando notas rigidamente de 1 a 5 estrelas através de validação nativa de intervalo).
+
 * **Módulo de Responsabilidade Social (Leis 10.639 e 11.645):**
-  * `ConteudosDiversidade` (Artigos e treinamentos corporativos de inclusão).
-  * `ParticipacoesTreinamentos` (Histórico de conclusão de cursos por parte da equipe).
-  * `RelatosDiscriminacao` (Ouvidoria interna e canal de denúncias contra preconceito, com suporte a relatos anônimos).
+  * `ConteudosDiversidade` (Artigos e treinamentos corporativos de inclusão com categorização estrita por Enum).
+  * `ParticipacoesTreinamentos` (Histórico e auditoria de conclusão de cursos por parte da equipe).
+  * `RelatosDiscriminacao` (Ouvidoria interna e canal de denúncias contra preconceito com suporte a relatos anônimos. Blindado na camada de dados com a trava `[Required]`, impossibilitando o envio de relatos sem conteúdo textual).
+
 
 ---
 
